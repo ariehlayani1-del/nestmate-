@@ -2,44 +2,78 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, TextInput } from 'react-native';
 import { Colors } from '../constants/theme';
 
+const STEPS = ['Compte', 'Profil', 'Logement', 'Style de vie', 'Intérêts'];
+
 export default function SignUpScreen({ onNext, onBack }: any) {
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [prenom, setPrenom] = useState('');
-  const [password, setPassword] = useState('');
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.cream }}>
       <ScrollView contentContainerStyle={{ padding: 24, paddingTop: 50 }}>
         <TouchableOpacity onPress={onBack} style={{ marginBottom: 18 }}>
           <Text style={{ color: Colors.muted, fontSize: 13 }}>← Retour</Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 24, fontWeight: '800', color: Colors.navy, marginBottom: 4 }}>Créer mon compte</Text>
-        <Text style={{ fontSize: 12, color: Colors.muted, marginBottom: 20 }}>Rejoins la communauté Nestmate</Text>
-        <View style={{ flexDirection: 'row', gap: 8, marginBottom: 14 }}>
-          <TouchableOpacity style={{ flex: 1, backgroundColor: Colors.white, borderWidth: 1.5, borderColor: Colors.border, borderRadius: 10, paddingVertical: 10, alignItems: 'center' }}>
-            <Text>🍎  Apple</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ flex: 1, backgroundColor: Colors.white, borderWidth: 1.5, borderColor: Colors.border, borderRadius: 10, paddingVertical: 10, alignItems: 'center' }}>
-            <Text>🔵  Google</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginVertical: 12 }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: Colors.border }} />
-          <Text style={{ fontSize: 10, color: Colors.muted }}>ou par email</Text>
-          <View style={{ flex: 1, height: 1, backgroundColor: Colors.border }} />
-        </View>
-        {[['PRÉNOM', prenom, setPrenom, 'Léa', false], ['EMAIL', email, setEmail, 'lea@email.com', false], ['MOT DE PASSE', password, setPassword, '••••••••', true]].map(([label, val, setter, ph, sec]: any) => (
-          <View key={label} style={{ marginBottom: 10 }}>
-            <Text style={{ fontSize: 9, fontWeight: '700', color: Colors.navy, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>{label}</Text>
-            <TextInput style={{ backgroundColor: Colors.white, borderWidth: 1.5, borderColor: val ? Colors.teal : Colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 13, color: Colors.navy }} value={val} onChangeText={setter} placeholder={ph} placeholderTextColor="#C0B8AE" secureTextEntry={sec} autoCapitalize="none" />
+
+        {/* Barre de progression */}
+        <View style={{ marginBottom: 24 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+            {STEPS.map((s, i) => (
+              <View key={i} style={{ alignItems: 'center', flex: 1 }}>
+                <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: i + 1 <= step ? Colors.teal : Colors.gray, alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+                  <Text style={{ fontSize: 11, fontWeight: '700', color: i + 1 <= step ? Colors.white : Colors.muted }}>{i + 1}</Text>
+                </View>
+                <Text style={{ fontSize: 8, color: i + 1 === step ? Colors.teal : Colors.muted, fontWeight: i + 1 === step ? '700' : '400', textAlign: 'center' }}>{s}</Text>
+              </View>
+            ))}
           </View>
-        ))}
-        <TouchableOpacity onPress={onNext} style={{ backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 13, alignItems: 'center', marginTop: 6 }}>
-          <Text style={{ color: Colors.white, fontWeight: '700', fontSize: 14 }}>Créer mon compte</Text>
+          <View style={{ height: 3, backgroundColor: Colors.gray, borderRadius: 2, overflow: 'hidden' }}>
+            <View style={{ height: 3, backgroundColor: Colors.teal, borderRadius: 2, width: `${(step / STEPS.length) * 100}%` as any }} />
+          </View>
+          <Text style={{ fontSize: 10, color: Colors.muted, textAlign: 'right', marginTop: 4 }}>Étape {step}/{STEPS.length}</Text>
+        </View>
+
+        <Text style={{ fontSize: 22, fontWeight: '800', color: Colors.navy, marginBottom: 4 }}>Crée ton compte</Text>
+        <Text style={{ fontSize: 12, color: Colors.muted, marginBottom: 20 }}>2 champs seulement pour commencer</Text>
+
+        {/* Boutons sociaux */}
+        <TouchableOpacity style={{ backgroundColor: Colors.navy, borderRadius: 12, paddingVertical: 13, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 10, marginBottom: 10 }} onPress={onNext}>
+          <Text style={{ fontSize: 18 }}>🍎</Text>
+          <Text style={{ color: Colors.white, fontWeight: '700', fontSize: 14 }}>Continuer avec Apple</Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 10, color: Colors.muted, textAlign: 'center', marginTop: 10 }}>En créant un compte, tu acceptes les <Text style={{ color: Colors.teal }}>CGU</Text></Text>
-        <TouchableOpacity style={{ alignItems: 'center', marginTop: 14 }} onPress={onNext}>
-          <Text style={{ color: Colors.muted, fontSize: 12 }}>Déjà un compte ? <Text style={{ color: Colors.teal, fontWeight: '600' }}>Se connecter</Text></Text>
+
+        <TouchableOpacity style={{ backgroundColor: Colors.white, borderRadius: 12, paddingVertical: 13, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 10, marginBottom: 20, borderWidth: 1.5, borderColor: Colors.border }} onPress={onNext}>
+          <Text style={{ fontSize: 18 }}>🔵</Text>
+          <Text style={{ color: Colors.navy, fontWeight: '700', fontSize: 14 }}>Continuer avec Google</Text>
         </TouchableOpacity>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+          <View style={{ flex: 1, height: 1, backgroundColor: Colors.border }} />
+          <Text style={{ fontSize: 11, color: Colors.muted }}>ou par email</Text>
+          <View style={{ flex: 1, height: 1, backgroundColor: Colors.border }} />
+        </View>
+
+        {/* Seulement 2 champs */}
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ fontSize: 9, fontWeight: '700', color: Colors.navy, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>PRÉNOM</Text>
+          <TextInput style={{ backgroundColor: Colors.white, borderWidth: 1.5, borderColor: prenom ? Colors.teal : Colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 13, color: Colors.navy }} value={prenom} onChangeText={setPrenom} placeholder="Léa" placeholderTextColor="#C0B8AE" />
+        </View>
+
+        <View style={{ marginBottom: 20 }}>
+          <Text style={{ fontSize: 9, fontWeight: '700', color: Colors.navy, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>EMAIL</Text>
+          <TextInput style={{ backgroundColor: Colors.white, borderWidth: 1.5, borderColor: email ? Colors.teal : Colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 13, color: Colors.navy }} value={email} onChangeText={setEmail} placeholder="lea@email.com" placeholderTextColor="#C0B8AE" autoCapitalize="none" keyboardType="email-address" />
+        </View>
+
+        <TouchableOpacity onPress={onNext} style={{ backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 13, alignItems: 'center', marginBottom: 12 }}>
+          <Text style={{ color: Colors.white, fontWeight: '700', fontSize: 14 }}>Continuer →</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={onNext} style={{ alignItems: 'center', paddingVertical: 10 }}>
+          <Text style={{ color: Colors.muted, fontSize: 12 }}>Explorer en mode invité</Text>
+        </TouchableOpacity>
+
+        <Text style={{ fontSize: 10, color: Colors.muted, textAlign: 'center', marginTop: 10, lineHeight: 16 }}>En continuant, tu acceptes les <Text style={{ color: Colors.teal }}>CGU</Text> et la <Text style={{ color: Colors.teal }}>politique de confidentialité</Text></Text>
       </ScrollView>
     </SafeAreaView>
   );
