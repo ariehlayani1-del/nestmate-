@@ -21,10 +21,12 @@ import VerificationIdentiteScreen from './screens/VerificationIdentiteScreen';
 import CheckInScreen from './screens/CheckInScreen';
 import CommunauteScreen from './screens/CommunauteScreen';
 import ColdStartScreen from './screens/ColdStartScreen';
+import PartenairesScreen from './screens/PartenairesScreen';
+import DashboardPartenaireScreen from './screens/DashboardPartenaireScreen';
 import { DepotAnnonceScreen, GroupesBailleurScreen, DashboardBailleurScreen } from './screens/BailleurScreens';
 import DevMenuScreen from './screens/DevMenuScreen';
 
-type Screen = 'dev'|'splash'|'choix'|'signup'|'verification'|'photo'|'appart'|'questionnaire'|'interests'|'ia_analyse'|'groupe_propose'|'groupe_accepte'|'groupe_actif'|'activites'|'notifs'|'profil'|'voisinage'|'verification_identite'|'checkin'|'communaute'|'cold_start'|'depot_annonce'|'groupes_bailleur'|'dashboard_bailleur';
+type Screen = 'dev'|'splash'|'choix'|'signup'|'verification'|'photo'|'appart'|'questionnaire'|'interests'|'ia_analyse'|'groupe_propose'|'groupe_accepte'|'groupe_actif'|'activites'|'notifs'|'profil'|'voisinage'|'communaute'|'checkin'|'cold_start'|'partenaires'|'dashboard_partenaire'|'depot_annonce'|'groupes_bailleur'|'dashboard_bailleur';
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('dev');
@@ -65,6 +67,8 @@ export default function App() {
       case 'communaute': return <CommunauteScreen onGroupe={() => go('groupe_actif')} onActivites={() => go('activites')} onNotifs={() => go('notifs')} onProfil={() => go('profil')} onVoisinage={() => go('voisinage')} />;
       case 'checkin': return <CheckInScreen onNext={() => go('groupe_actif')} onBack={back} jour={30} />;
       case 'cold_start': return <ColdStartScreen onNext={() => go('signup')} onBack={back} />;
+      case 'partenaires': return <PartenairesScreen onGroupe={() => go('groupe_actif')} onActivites={() => go('activites')} onNotifs={() => go('notifs')} onProfil={() => go('profil')} />;
+      case 'dashboard_partenaire': return <DashboardPartenaireScreen onBack={back} />;
       case 'depot_annonce': return <DepotAnnonceScreen onNext={() => go('dashboard_bailleur')} onBack={back} />;
       case 'groupes_bailleur': return <GroupesBailleurScreen onSelect={() => go('dashboard_bailleur')} onBack={back} />;
       case 'dashboard_bailleur': return <DashboardBailleurScreen onBack={() => go('groupes_bailleur')} />;

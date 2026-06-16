@@ -21,13 +21,17 @@ const SECTIONS = [
     { name: 'profil', label: '15 — Profil + avis aveugle 🆕' },
     { name: 'communaute', label: '16 — Communauté quartier 🆕' },
     { name: 'voisinage', label: '17 — Voisinage' },
-    { name: 'checkin', label: '18 — Check-in J+30 🆕' },
-    { name: 'cold_start', label: '19 — Cold start & liste attente 🆕' },
+    { name: 'partenaires', label: '18 — Partenaires & offres 🆕' },
+    { name: 'checkin', label: '19 — Check-in J+30 🆕' },
+    { name: 'cold_start', label: '20 — Cold start & liste attente 🆕' },
   ]},
   { label: '🏠 JOURNEY BAILLEUR', screens: [
-    { name: 'depot_annonce', label: '20 — Dépôt annonce amélioré 🆕' },
-    { name: 'groupes_bailleur', label: '21 — Groupes + photos masquées 🆕' },
-    { name: 'dashboard_bailleur', label: '22 — Dashboard bailleur' },
+    { name: 'depot_annonce', label: '21 — Dépôt annonce amélioré 🆕' },
+    { name: 'groupes_bailleur', label: '22 — Groupes + photos masquées 🆕' },
+    { name: 'dashboard_bailleur', label: '23 — Dashboard bailleur' },
+  ]},
+  { label: '🤝 ESPACE PARTENAIRE', screens: [
+    { name: 'dashboard_partenaire', label: '24 — Dashboard partenaire 🆕' },
   ]},
 ];
 
@@ -36,7 +40,7 @@ export default function DevMenuScreen({ onGo }: { onGo: (s: string) => void }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.cream }}>
       <View style={{ backgroundColor: Colors.navy, paddingHorizontal: 20, paddingTop: 50, paddingBottom: 20 }}>
         <Text style={{ fontSize: 28, fontWeight: '800', color: Colors.white, letterSpacing: -1 }}>nest<Text style={{ color: Colors.teal }}>mate</Text></Text>
-        <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 4 }}>DEV — 22 screens</Text>
+        <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 4 }}>DEV — 24 screens</Text>
       </View>
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         {SECTIONS.map((section) => (
