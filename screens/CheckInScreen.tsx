@@ -1,73 +1,173 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Alert } from 'react-native';
 import { Colors } from '../constants/theme';
 
-const QUESTIONS_CHECKIN = [
-  { q: 'Comment se passe la colocation jusqu\'ici ?', opts: ['😍 Super bien', '🙂 Bien', '😐 Moyen', '😟 Difficile'] },
-  { q: 'Y a-t-il des tensions dans le groupe ?', opts: ['Non, tout va bien', 'De petites frictions', 'Oui, des conflits', 'Je préfère ne pas dire'] },
-  { q: 'La répartition des tâches est-elle respectée ?', opts: ['Oui, parfaitement', 'Mostly yes', 'Pas vraiment', 'Non'] },
-  { q: 'Recommanderais-tu Nestmate à un ami ?', opts: ['Oui, absolument', 'Probablement', 'Pas sûr', 'Non'] },
+const CRITERIA = [
+  { key: 'rythme', icon: '🌙', label: 'Rythme de vie', question: 'Les horaires de chacun sont compatibles ?' },
+  { key: 'organisation', icon: '🧹', label: 'Organisation', question: 'La répartition des tâches fonctionne ?' },
+  { key: 'ambiance', icon: '🤝', label: 'Ambiance', question: 'L\'entente générale est bonne ?' },
+  { key: 'communication', icon: '💬', label: 'Communication', question: 'On se parle facilement en cas de problème ?' },
 ];
 
-export default function CheckInScreen({ onNext, onBack, jour = 30 }: any) {
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [submitted, setSubmitted] = useState(false);
-  const allAnswered = Object.keys(answers).length === QUESTIONS_CHECKIN.length;
+const MOODS = [
+  { emoji: '😊', label: 'Tout va bien', key: 'good' },
+  { emoji: '😐', label: 'Quelques ajustements', key: 'neutral' },
+  { emoji: '😟', label: 'Ça coince', key: 'bad' },
+];
 
-  if (submitted) {
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.navy, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-        <Text style={{ fontSize: 56, marginBottom: 16 }}>🎉</Text>
-        <Text style={{ fontSize: 24, fontWeight: '800', color: Colors.white, marginBottom: 8, textAlign: 'center' }}>Merci pour ton retour !</Text>
-        <Text style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', textAlign: 'center', marginBottom: 32, lineHeight: 20 }}>Tes réponses nous aident à améliorer l'expérience de tous les colocataires Nestmate</Text>
-        <View style={{ backgroundColor: 'rgba(255,255,255,0.07)', borderRadius: 14, padding: 16, width: '100%', marginBottom: 24 }}>
-          <Text style={{ fontSize: 13, fontWeight: '700', color: Colors.teal, marginBottom: 8 }}>Prochain check-in</Text>
-          <Text style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>À J+{jour === 30 ? 90 : 180} — dans {jour === 30 ? 60 : 90} jours</Text>
-        </View>
-        <TouchableOpacity onPress={onNext} style={{ backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 13, alignItems: 'center', width: '100%' }}>
-          <Text style={{ color: Colors.white, fontWeight: '700', fontSize: 14 }}>Retour au groupe →</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
+export default function CheckInScreen({ onNext, onBack, jour = 30 }: { onNext: () => void; onBack: () => void; jour?: 30 | 90 }) {
+  const [scores, setScores] = useState({ rythme: 0, organisation: 0, ambiance: 0, communication: 0 });
+  const [mood, setMood] = useState<string | null>(null);
+  const [text, setText] = useState('');
+
+  const handleScore = (criteriaKey: string, value: number) => {
+    setScores(prev => ({ ...prev, [criteriaKey]: value }));
+  };
+
+  const allScoresFilled = Object.values(scores).every(score => score > 0);
+  const isValid = allScoresFilled && mood !== null;
+
+  const handleValidate = () => {
+    Alert.alert('Merci ! Ton check-in a bien été enregistré 🙌', '', [{ text: 'OK', onPress: onNext }]);
+  };
+
+  const badgeColor = jour === 90 ? Colors.teal : '#FF9500';
+  const badgeBg = jour === 90 ? 'rgba(58, 191, 165, 0.15)' : 'rgba(255, 149, 0, 0.15)';
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.cream }}>
-      <ScrollView contentContainerStyle={{ padding: 24, paddingTop: 50 }}>
-        <TouchableOpacity onPress={onBack} style={{ marginBottom: 18 }}>
-          <Text style={{ color: Colors.muted, fontSize: 13 }}>← Retour</Text>
-        </TouchableOpacity>
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+        {/* Header */}
+        <View style={{ backgroundColor: Colors.navy, paddingHorizontal: 18, paddingTop: 50, paddingBottom: 28, borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
+          {/* Badge */}
+          <View style={{ alignSelf: 'flex-start', backgroundColor: badgeBg, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginBottom: 12 }}>
+            <Text style={{ fontSize: 11, fontWeight: '700', color: badgeColor, letterSpacing: 0.5, textTransform: 'uppercase' }}>Check-in J+{jour}</Text>
+          </View>
 
-        <View style={{ backgroundColor: Colors.teal, borderRadius: 14, padding: 16, marginBottom: 24, flexDirection: 'row', gap: 12, alignItems: 'center' }}>
-          <Text style={{ fontSize: 32 }}>📋</Text>
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 16, fontWeight: '800', color: Colors.white, marginBottom: 2 }}>Check-in J+{jour}</Text>
-            <Text style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>Comment se passe ta colocation ?</Text>
+          <Text style={{ fontSize: 22, fontWeight: '800', color: Colors.white, marginBottom: 6 }}>Comment se passe ta coloc ?</Text>
+          <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', lineHeight: 16 }}>Tes réponses sont anonymes et aident à améliorer les matchings futurs</Text>
+        </View>
+
+        {/* Évaluation par critère */}
+        <View style={{ paddingHorizontal: 16, paddingTop: 20, paddingBottom: 8 }}>
+          <Text style={{ fontSize: 10, fontWeight: '700', color: Colors.muted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 14 }}>Évaluation</Text>
+
+          {CRITERIA.map(criteria => (
+            <View key={criteria.key} style={{ backgroundColor: Colors.white, borderRadius: 14, padding: 14, marginBottom: 12, shadowColor: Colors.navy, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 1 }}>
+              {/* Criteria Header */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <Text style={{ fontSize: 18 }}>{criteria.icon}</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 12, fontWeight: '700', color: Colors.navy }}>{criteria.label}</Text>
+                  <Text style={{ fontSize: 11, color: Colors.muted, marginTop: 2 }}>{criteria.question}</Text>
+                </View>
+              </View>
+
+              {/* Stars */}
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                {[1, 2, 3, 4, 5].map(star => {
+                  const isActive = scores[criteria.key as keyof typeof scores] >= star;
+                  return (
+                    <TouchableOpacity
+                      key={star}
+                      onPress={() => handleScore(criteria.key, star)}
+                      style={{ flex: 1 }}
+                    >
+                      <Text style={{ fontSize: 32, textAlign: 'center', color: isActive ? '#FFD700' : Colors.gray }}>
+                        {isActive ? '★' : '☆'}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+          ))}
+        </View>
+
+        {/* Question ouverte */}
+        <View style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
+          <Text style={{ fontSize: 10, fontWeight: '700', color: Colors.muted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 10 }}>Avis personnel</Text>
+
+          <View style={{ backgroundColor: Colors.white, borderRadius: 14, padding: 14, marginBottom: 20, shadowColor: Colors.navy, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 1 }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: Colors.navy, marginBottom: 10 }}>Un mot sur ta coloc en ce moment ?</Text>
+            <TextInput
+              multiline
+              numberOfLines={3}
+              placeholder="Tout se passe bien, on a nos habitudes..."
+              placeholderTextColor={Colors.muted}
+              value={text}
+              onChangeText={setText}
+              style={{
+                fontSize: 12,
+                color: Colors.navy,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: Colors.border,
+                paddingHorizontal: 12,
+                paddingVertical: 10,
+                fontFamily: 'System',
+                textAlignVertical: 'top',
+              }}
+            />
+            <Text style={{ fontSize: 10, color: Colors.muted, marginTop: 8 }}>Optionnel</Text>
           </View>
         </View>
 
-        <Text style={{ fontSize: 13, color: Colors.muted, marginBottom: 24, lineHeight: 18 }}>
-          4 questions rapides pour s'assurer que tout va bien. Tes réponses sont anonymisées.
-        </Text>
+        {/* Indicateur d'humeur globale */}
+        <View style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
+          <Text style={{ fontSize: 10, fontWeight: '700', color: Colors.muted, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 10 }}>Ressenti global</Text>
 
-        {QUESTIONS_CHECKIN.map((q, i) => (
-          <View key={i} style={{ marginBottom: 20 }}>
-            <Text style={{ fontSize: 14, fontWeight: '700', color: Colors.navy, marginBottom: 12 }}>{q.q}</Text>
-            <View style={{ gap: 8 }}>
-              {q.opts.map((opt, j) => {
-                const selected = answers[i] === opt;
-                return (
-                  <TouchableOpacity key={j} onPress={() => setAnswers(prev => ({ ...prev, [i]: opt }))} style={{ backgroundColor: selected ? Colors.navy : Colors.white, borderRadius: 12, padding: 14, borderWidth: 1.5, borderColor: selected ? Colors.navy : Colors.border }}>
-                    <Text style={{ fontSize: 13, fontWeight: selected ? '700' : '500', color: selected ? Colors.white : Colors.navy }}>{opt}</Text>
-                  </TouchableOpacity>
-                );
-              })}
+          <View style={{ backgroundColor: Colors.white, borderRadius: 14, padding: 14, marginBottom: 20, shadowColor: Colors.navy, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 1 }}>
+            <View style={{ flexDirection: 'column', gap: 10 }}>
+              {MOODS.map(m => (
+                <TouchableOpacity
+                  key={m.key}
+                  onPress={() => setMood(m.key)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 12,
+                    paddingHorizontal: 14,
+                    paddingVertical: 12,
+                    borderRadius: 10,
+                    borderWidth: 2,
+                    borderColor: mood === m.key ? Colors.teal : Colors.gray,
+                    backgroundColor: mood === m.key ? 'rgba(58, 191, 165, 0.08)' : Colors.cream,
+                  }}
+                >
+                  <Text style={{ fontSize: 24 }}>{m.emoji}</Text>
+                  <Text style={{ fontSize: 13, fontWeight: mood === m.key ? '700' : '500', color: mood === m.key ? Colors.teal : Colors.navy, flex: 1 }}>
+                    {m.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
-        ))}
+        </View>
 
-        <TouchableOpacity onPress={() => setSubmitted(true)} disabled={!allAnswered} style={{ backgroundColor: allAnswered ? Colors.teal : Colors.gray, borderRadius: 12, paddingVertical: 13, alignItems: 'center', marginTop: 8 }}>
-          <Text style={{ color: allAnswered ? Colors.white : Colors.muted, fontWeight: '700', fontSize: 14 }}>Envoyer mon retour →</Text>
+        {/* Bouton Valider */}
+        <View style={{ paddingHorizontal: 16, paddingBottom: 20 }}>
+          <TouchableOpacity
+            onPress={handleValidate}
+            disabled={!isValid}
+            style={{
+              backgroundColor: isValid ? Colors.teal : Colors.gray,
+              borderRadius: 12,
+              paddingVertical: 14,
+              alignItems: 'center',
+              opacity: isValid ? 1 : 0.5,
+            }}
+          >
+            <Text style={{ fontSize: 14, fontWeight: '700', color: Colors.white }}>Envoyer mon check-in</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Back button for mobile */}
+        <TouchableOpacity
+          onPress={onBack}
+          style={{ marginTop: 8, paddingHorizontal: 16, paddingBottom: 20 }}
+        >
+          <Text style={{ fontSize: 13, color: Colors.muted, textAlign: 'center', fontWeight: '500' }}>Retour</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

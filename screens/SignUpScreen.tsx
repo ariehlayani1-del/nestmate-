@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, TextInput } from 'react-native';
+import { SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 
 const STEPS = ['Compte', 'Profil', 'Logement', 'Style de vie', 'Intérêts'];
@@ -8,6 +8,10 @@ export default function SignUpScreen({ onNext, onBack }: any) {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [prenom, setPrenom] = useState('');
+  const [classe, setClasse] = useState('');
+  const [domaineEtudes, setDomaineEtudes] = useState('');
+  const [ecoleNom, setEcoleNom] = useState('');
+  const [ecoleAdresse, setEcoleAdresse] = useState('');
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.cream }}>
@@ -63,6 +67,23 @@ export default function SignUpScreen({ onNext, onBack }: any) {
         <View style={{ marginBottom: 20 }}>
           <Text style={{ fontSize: 9, fontWeight: '700', color: Colors.navy, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>EMAIL</Text>
           <TextInput style={{ backgroundColor: Colors.white, borderWidth: 1.5, borderColor: email ? Colors.teal : Colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 13, color: Colors.navy }} value={email} onChangeText={setEmail} placeholder="lea@email.com" placeholderTextColor="#C0B8AE" autoCapitalize="none" keyboardType="email-address" />
+        </View>
+
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ fontSize: 9, fontWeight: '700', color: Colors.navy, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>CLASSE</Text>
+          <TextInput style={{ backgroundColor: Colors.white, borderWidth: 1.5, borderColor: classe ? Colors.teal : Colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 13, color: Colors.navy }} value={classe} onChangeText={setClasse} placeholder="Licence 3" placeholderTextColor="#C0B8AE" />
+        </View>
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ fontSize: 9, fontWeight: '700', color: Colors.navy, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>DOMAINE D'ÉTUDES</Text>
+          <TextInput style={{ backgroundColor: Colors.white, borderWidth: 1.5, borderColor: domaineEtudes ? Colors.teal : Colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 13, color: Colors.navy }} value={domaineEtudes} onChangeText={setDomaineEtudes} placeholder="Design" placeholderTextColor="#C0B8AE" />
+        </View>
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ fontSize: 9, fontWeight: '700', color: Colors.navy, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>ÉCOLE</Text>
+          <TextInput style={{ backgroundColor: Colors.white, borderWidth: 1.5, borderColor: ecoleNom ? Colors.teal : Colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 13, color: Colors.navy }} value={ecoleNom} onChangeText={setEcoleNom} placeholder="École des Arts Numériques" placeholderTextColor="#C0B8AE" />
+        </View>
+        <View style={{ marginBottom: 20 }}>
+          <Text style={{ fontSize: 9, fontWeight: '700', color: Colors.navy, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 4 }}>ADRESSE ÉCOLE</Text>
+          <TextInput style={{ backgroundColor: Colors.white, borderWidth: 1.5, borderColor: ecoleAdresse ? Colors.teal : Colors.border, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 13, color: Colors.navy }} value={ecoleAdresse} onChangeText={setEcoleAdresse} placeholder="25 Rue de l'Université, Lyon" placeholderTextColor="#C0B8AE" />
         </View>
 
         <TouchableOpacity onPress={onNext} style={{ backgroundColor: Colors.teal, borderRadius: 12, paddingVertical: 13, alignItems: 'center', marginBottom: 12 }}>

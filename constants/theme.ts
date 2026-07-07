@@ -10,4 +10,14 @@ export const Colors = {
   gold: '#F5A623',
   green: '#43A047',
   border: '#E5E0D8',
+  light: {
+    text: '#1A3A4A',
+    background: '#F7F5F2',
+    icon: '#8A9FAA',
+  },
+  dark: {
+    text: '#FFFFFF',
+    background: '#1A3A4A',
+    icon: '#8A9FAA',
+  },
 };

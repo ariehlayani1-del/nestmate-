@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/theme';
 
 const SECTIONS = [
@@ -19,19 +19,39 @@ const SECTIONS = [
     { name: 'activites', label: '13 — Activités' },
     { name: 'notifs', label: '14 — Notifications' },
     { name: 'profil', label: '15 — Profil + avis aveugle 🆕' },
-    { name: 'communaute', label: '16 — Communauté quartier 🆕' },
     { name: 'voisinage', label: '17 — Voisinage' },
     { name: 'partenaires', label: '18 — Partenaires & offres 🆕' },
-    { name: 'checkin', label: '19 — Check-in J+30 🆕' },
-    { name: 'cold_start', label: '20 — Cold start & liste attente 🆕' },
+    { name: 'biens_feed', label: '19 — Feed Profil B 🆕' },
+    { name: 'property_detail', label: '20 — Détail du bien 🆕' },
+  ]},
+  { label: '👥 BLOC 2 — GROUPE', screens: [
+    { name: 'groupe_statut', label: '21 — État du groupe 🆕' },
+    { name: 'groupe_chat', label: '22 — Chat groupe 🆕' },
+    { name: 'groupe_validation', label: '23 — Validation groupe 🆕' },
+  ]},
+  { label: '📋 BLOC 3 — RÉPUTATION', screens: [
+    { name: 'profil_membre', label: '24 — Profil membre 🆕' },
+    { name: 'reputation', label: '25 — Ma réputation 🆕' },
+  ]},
+  { label: '🏘️ BLOC 4 — FEED', screens: [
+    { name: 'filtres', label: '25 — Filtres 🆕' },
+    { name: 'aucun_groupe', label: '26 — Aucun groupe 🆕' },
+  ]},
+  { label: '👤 BLOC 5 — COMPTE', screens: [
+    { name: 'parametres', label: '27 — Paramètres 🆕' },
+  ]},
+  { label: '🏘️ BLOC 6 — RÉTENTION', screens: [
+    { name: 'communaute', label: '28 — Communauté quartier 🆕' },
+    { name: 'cold_start', label: '29 — Cold start & liste attente 🆕' },
+    { name: 'checkin', label: '30 — Check-in J+30 🆕' },
   ]},
   { label: '🏠 JOURNEY BAILLEUR', screens: [
-    { name: 'depot_annonce', label: '21 — Dépôt annonce amélioré 🆕' },
-    { name: 'groupes_bailleur', label: '22 — Groupes + photos masquées 🆕' },
-    { name: 'dashboard_bailleur', label: '23 — Dashboard bailleur' },
+    { name: 'depot_annonce', label: '28 — Dépôt annonce amélioré 🆕' },
+    { name: 'groupes_bailleur', label: '29 — Groupes + photos masquées 🆕' },
+    { name: 'dashboard_bailleur', label: '30 — Dashboard bailleur' },
   ]},
   { label: '🤝 ESPACE PARTENAIRE', screens: [
-    { name: 'dashboard_partenaire', label: '24 — Dashboard partenaire 🆕' },
+    { name: 'dashboard_partenaire', label: '30 — Dashboard partenaire 🆕' },
   ]},
 ];
 
@@ -40,7 +60,7 @@ export default function DevMenuScreen({ onGo }: { onGo: (s: string) => void }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.cream }}>
       <View style={{ backgroundColor: Colors.navy, paddingHorizontal: 20, paddingTop: 50, paddingBottom: 20 }}>
         <Text style={{ fontSize: 28, fontWeight: '800', color: Colors.white, letterSpacing: -1 }}>nest<Text style={{ color: Colors.teal }}>mate</Text></Text>
-        <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 4 }}>DEV — 24 screens</Text>
+        <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 4 }}>DEV — 31 screens</Text>
       </View>
       <ScrollView contentContainerStyle={{ padding: 16 }}>
         {SECTIONS.map((section) => (

@@ -22,7 +22,7 @@ const ACTIONS = [
   { icon: '💡', label: 'Payer les charges', detail: 'Tous · 1er oct', color: '#FDECEA' },
 ];
 
-export default function GroupeActifScreen({ onActivites, onProfil, onNotifs, onVoisinage, onTournante }: any) {
+export default function GroupeActifScreen({ onActivites, onProfil, onNotifs, onVoisinage, onTournante, onChat, onCheckin }: any) {
   const [showFantome, setShowFantome] = useState(true);
   const [showRemplacant, setShowRemplacant] = useState(false);
   const [showSlotLibre, setShowSlotLibre] = useState(false);
@@ -162,6 +162,8 @@ export default function GroupeActifScreen({ onActivites, onProfil, onNotifs, onV
         { icon: '🗺️', label: 'Voisinage', onPress: onVoisinage },
         { icon: '🎯', label: 'Activités', onPress: onActivites },
         { icon: '🔔', label: 'Notifs', onPress: onNotifs },
+        { icon: '💬', label: 'Chat', onPress: onChat },
+        { icon: '📋', label: 'Check-in', onPress: onCheckin },
         { icon: '👤', label: 'Profil', onPress: onProfil },
       ]} />
     </SafeAreaView>
